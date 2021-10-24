@@ -1,0 +1,1 @@
+cp config/ignore.txt .gitignore
