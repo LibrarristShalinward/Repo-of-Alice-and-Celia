@@ -57,14 +57,18 @@
 
 1. 在`源代码管理`下的输入栏中输入修改说明（不妨统一格式为“*日期*-**内容**”，如“*20211025*-**添加Git说明**”，实际输入时不加引号），完成后按`Ctrl+Enter`提交（可在不保存修改至Git的情况下进行，此时将保存所有修改）
    
-2. （可选，推荐提交若干次修改至分支之后再进行）点击`源代码管理存储库`下的$\rightleftarrows$双箭头将所有未提交修改同步至GitHub库的对应分支
+2. （可选，推荐提交若干次修改至分支之后再进行）点击`源代码管理存储库`下的“x$\downarrow$x$\uparrow$”按钮，将所有未提交修改同步至GitHub库的对应分支
 
 ## 合并当前分支至主分支
 
 <font size = "6">**强调：严禁直接在本地或云端（GitHub）合并自己的分支至main/master主分支，这将跳过代码的比较检测流程，可能或导致代码合并冲突**</font>
 
-1. 点击`源代码管理存储库`下的$\rightleftarrows$双箭头，确认已将所有未提交修改分支同步至GitHub库的对应分支
+1. 点击`源代码管理存储库`下的“x$\downarrow$x$\uparrow$”按钮或$\rightleftarrows$双箭头，确认已将所有未提交修改分支同步至GitHub库的对应分支
    
-2. 打开GitHub网页端，进入[repo页面](https://github.com/LibrarristShalinward/Repo-of-Alice-and-Celia)，点击`Pull Request`进入[拉取申请页面](https://github.com/LibrarristShalinward/Repo-of-Alice-and-Celia/pulls)![Pull Request页面](3.png)[Pull Request页面](3.png)
+2. 打开GitHub网页端，进入[repo页面](https://github.com/LibrarristShalinward/Repo-of-Alice-and-Celia)，点击`Pull request`进入[拉取申请页面](https://github.com/LibrarristShalinward/Repo-of-Alice-and-Celia/pulls)![Pull Request页面](3.png)[Pull Request页面](3.png)
    
-3. 点击`Pull Request`，在`compare`一栏选择自己的分支
+3. 点击`Pull request`，进入发起页面
+   
+4. 在`compare`一栏选择自己的分支，确认修改后点击`Create pull request`发起申请![修改对比页面](4.png)[修改对比页面](4.png)
+   
+5. 在新页面添加修改说明（可选），点击`Create pull request`发起申请，等待其余人确认（当前设置为2人确认才可以提交）
