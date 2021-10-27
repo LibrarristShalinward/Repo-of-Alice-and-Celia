@@ -8,4 +8,4 @@
 |jbh||
 |jsx||
 |srj||
-|zny||
+|zny|*|
