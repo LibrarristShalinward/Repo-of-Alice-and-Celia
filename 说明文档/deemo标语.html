@@ -1,22 +1,3 @@
-<font size = "3">
-
-<center>
-    <font size = "7" face = "楷体">
-        难度函数
-    </font>
-</center>
-
-----
-
-<br>
-<br>
-
-本篇文档旨在介绍构成本项目规划问题中目标函数的基础：`Deemo-I：古树旋律`中两按键之间难度函数`diff()`。我们将详细介绍函数的定义以及进行相应定义的原因
-
-# 古树旋律
-
-首先，让我们简单回顾一下古树旋律及其游戏机制
-
 <table style="display: table; border-collapse: collapse; margin: auto; background-color:transparent;">
     <tbody>
         <tr>
@@ -45,24 +26,3 @@
         </tr>
     </tbody>
 </table>
-
-《Deemo》是由台湾雷亚游戏（Rayark）开发的一款音乐游戏。游戏中有两种音符：黑色的点击音符和金色的滑动音符。
-
-- 黑色音符（以下简称`黑键`）需要在音符落到判定线时依次点击。
-  
-  ![](./素材/note.png)
-
-  黑色音符存在一种变体：白色音符。这一音符仅在游戏音效上与黑色音符有差别，后续数学分析中一缕视作黑色音符。
-
-  ![](./素材/nosound.png)
-  
-- 金色音符只需在音符快要落到判定线时划过（当然如果音符密度不大，节奏鲜明，也可以按照需要依次点击）。
-  
-  ![](./素材/link.png)
-
-更多关于`Deemo-I：古树旋律`的信息见[萌娘百科-Deemo](https://zh.moegirl.org.cn/Deemo#%E9%9F%B3%E7%AC%A6%E5%92%8C%E5%88%A4%E5%AE%9A)。本节部分文字及图标取自该网站。
-
-# 难度函数分析，及若干建模假设
-
-
-
