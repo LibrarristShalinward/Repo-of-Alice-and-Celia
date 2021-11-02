@@ -22,9 +22,9 @@
 ## 开始一个阶段的编程前
 1. 打开左侧边栏“Git”栏
    
-2. 若无法看到`源代码管理存储库`和`源代码管理`两个纵向栏，通过`源代码管理`右侧的 **`···`**->`视图`设置两栏可见（完成后界面如下图所示）![设置Git菜单全部可见](1.png)[设置Git菜单全部可见](1.png)
+2. 若无法看到`源代码管理存储库`和`源代码管理`两个纵向栏，通过`源代码管理`右侧的 **`···`**->`视图`设置两栏可见（完成后界面如下图所示）![设置Git菜单全部可见](./1.png)[设置Git菜单全部可见](./1.png)
    
-3. 点击`源代码管理存储库`下的 **`···`**->`签出到`，在弹出的输入栏中输入新的分支（branch）名称（不妨统一格式为“*日期*-**内容**-***修改者***”，如“*20211025*-**修改说明**-***jbh***”，实际输入时不加引号），如下图所示。完成后后按`Enter`即可创建新的分支![创建新的branch](2.png)[创建新的branch](2.png)
+3. 点击`源代码管理存储库`下的 **`···`**->`签出到`，在弹出的输入栏中输入新的分支（branch）名称（不妨统一格式为“*日期*-**内容**-***修改者***”，如“*20211025*-**修改说明**-***jbh***”，实际输入时不加引号），如下图所示。完成后后按`Enter`即可创建新的分支![创建新的branch](./2.png)[创建新的branch](./2.png)
    
 4. 点击自动弹出的蓝色按钮或`源代码管理存储库`下的$\rightleftarrows$双箭头将分支同步至GitHub库
    
@@ -65,10 +65,10 @@
 
 1. 点击`源代码管理存储库`下的“x$\downarrow$x$\uparrow$”按钮或$\rightleftarrows$双箭头，确认已将所有未提交修改分支同步至GitHub库的对应分支
    
-2. 打开GitHub网页端，进入[repo页面](https://github.com/LibrarristShalinward/Repo-of-Alice-and-Celia)，点击`Pull request`进入[拉取申请页面](https://github.com/LibrarristShalinward/Repo-of-Alice-and-Celia/pulls)![Pull Request页面](3.png)[Pull Request页面](3.png)
+2. 打开GitHub网页端，进入[repo页面](https://github.com/LibrarristShalinward/Repo-of-Alice-and-Celia)，点击`Pull request`进入[拉取申请页面](https://github.com/LibrarristShalinward/Repo-of-Alice-and-Celia/pulls)![Pull Request页面](./3.png)[Pull Request页面](./3.png)
    
 3. 点击`Pull request`，进入发起页面
    
-4. 在`compare`一栏选择自己的分支，确认修改后点击`Create pull request`发起申请![修改对比页面](4.png)[修改对比页面](4.png)
+4. 在`compare`一栏选择自己的分支，确认修改后点击`Create pull request`发起申请![修改对比页面](./4.png)[修改对比页面](./4.png)
    
 5. 在新页面添加修改说明（可选），点击`Create pull request`发起申请，等待其余人确认（当前设置为2人确认才可以提交）
