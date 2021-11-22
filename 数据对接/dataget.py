@@ -1,13 +1,13 @@
 import codecs
 import numpy as np
 import json
-from os import mkdir, remove
+
 from os.path import exists, getsize
 
 
 class chart:
     def __init__(self, ID = None) -> None:
-        self.__ID = ID
+        self.__ID = ID 
         self.__name = ""
         self.file = ID + ".json"
         self.json = None
@@ -29,15 +29,16 @@ class chart:
         id=[]
         time=[]
         size=[]
-        #pos=[]
+        pos=[]
         for obj in self.json['notes']:
             id.append(obj['$id'])
             time.append(obj['_time'])
             size.append(obj['size'])
+            pos.append(obj['pos'])
         iflinks=[0 for _ in range(len(id))]
         for obj in self.json['links']:
             for i in obj['notes']:
                 iflinks[(int(i['$ref']))-1]=1
-        A=[id, size, time, iflinks]
+        A=[id, size, time, pos, iflinks]
         A=np.array(A)
         return A
