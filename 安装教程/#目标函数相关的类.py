@@ -42,4 +42,3 @@ class Solution:
             return self.Point() + self.Move() + self.Xhand()
         else:
             return self.k2f * self.Move() + self.Xhand()
-    
