@@ -22,8 +22,8 @@ class Solution:
             dtt = self.tao0
         return self.k1 / dtt
     def Move(self):
-        if abs(self.x_2-self.s_1) > self.chi0:
-            dxx = abs(self.x_2-self.s_1) - self.chi0
+        if abs(self.x_2-self.x_1) > self.chi0:
+            dxx = abs(self.x_2-self.x_1) - self.chi0
         else:
             dxx = 0
         return self.k2 * dxx / self.dt
