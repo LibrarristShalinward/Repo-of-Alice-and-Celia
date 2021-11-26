@@ -1,7 +1,7 @@
 import codecs
 import numpy as np
 import json
-
+from os import mkdir, remove
 from os.path import exists, getsize
 
 
