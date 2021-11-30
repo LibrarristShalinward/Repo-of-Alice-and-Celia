@@ -8,7 +8,7 @@ class Chart:
     def __init__(self, filename) -> None:
         self.file = filename
         self.json = None
-        self.diff = Diff().xnote_diff
+        self.diff = Diff().xnote_diff()
 
     def exists(self): return exists(self.file)
 

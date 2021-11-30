@@ -19,20 +19,17 @@ class config:
 class Diff(config):
     def __init__(self) -> None:
         super().__init__()
+        self.dtt = lambda dt: max(dt, self.tao0)
 
     def point(self, dt):
-        if dt > self.tao0:
-            dtt = self.dt
-        else:
-            dtt = self.tao0
-        return self.k1 / dtt
+        return self.k1 / self.dtt(dt)
 
     def move(self, x_1, x_2, dt):
         if abs(x_2-x_1) > self.chi0:
             dxx = abs(x_2-x_1) - self.chi0
         else:
             dxx = 0
-        return self.k2 * dxx / dt
+        return self.k2 * dxx / self.dtt(dt)
 
     def xhand(self, flag, x_2):
         if flag == 0:
