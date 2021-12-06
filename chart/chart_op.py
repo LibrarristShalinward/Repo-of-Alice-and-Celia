@@ -177,12 +177,12 @@ class PoliciedChart(Chart, DyOptim):
         self.step()
         for _ in range(10):
             self.step()
-            if cpr_lv > 0: self.cpr_route(self.pointer + 2)
+            if cpr_lv == 1: self.cpr_route(self.pointer + 2)
         while(self.pointer >= 0):
             self.step()
-            if cpr_lv > 0: self.cpr_route(self.pointer + 2)
-            if cpr_lv > 1 and self.pointer % 10 == 0: self.cpr_route_period(self.pointer + 2, 10)
-        if cpr_lv > 2: self.cpr_all()
+            if cpr_lv == 1: self.cpr_route(self.pointer + 2)
+            if cpr_lv == 2 and self.pointer % 10 == 0: self.cpr_route_period(self.pointer + 2, 10)
+        if cpr_lv == 3: self.cpr_all()
 
     def get_op_re(self, cpr_lv = 3):
         if not self.route:
