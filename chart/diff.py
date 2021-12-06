@@ -19,23 +19,28 @@ class config:
 class Diff(config):
     def __init__(self) -> None:
         super().__init__()
-        self.dtt = lambda dt: max(dt, self.tao0)
+
+    def dtt_(self, dt): 
+        if dt < 1e-5: 
+            return 1e8
+        else: 
+            return 1 / max(dt, self.tao0)
 
     def point(self, dt):
-        return self.k1 / self.dtt(dt)
+        return self.k1 * self.dtt_(dt)
 
     def move(self, x_1, x_2, dt):
         if abs(x_2-x_1) > self.chi0:
             dxx = abs(x_2-x_1) - self.chi0
         else:
             dxx = 0
-        return self.k2 * dxx / self.dtt(dt)
+        return self.k2 * dxx * self.dtt_(dt)
 
     def xhand(self, flag, x_2):
         if flag == 0:
-            return self.k3 * ReLU(x_2)
+            return self.k3 * ReLU(x_2 / self.D)
         else:
-            return self.k3 * ReLU(-x_2)
+            return self.k3 * ReLU(-x_2 / self.D)
 
     def __call__(self, dt, x_1, x_2, bt, flag):# bt键型黑黑0黑黄1黄黑2黄黄3；flag左手0右手1
         if bt == 0 or bt == 2:

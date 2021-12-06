@@ -110,15 +110,19 @@ class DyOptim:
     @abstractmethod
     def cost(self, stage_idx, status_idx, next_status_idx) -> float: 
         pass
+    
+    @abstractmethod
+    def end_cost(self, end_status_idx) -> float:
+        pass
 
-    def __init__(self, struct, link, cost):#定义初始化函数,传入一张列表，每一行传入该行的名字
+    def __init__(self, struct, link, cost, end_cost = None):#定义初始化函数,传入一张列表，每一行传入该行的名字
         
         self.struct = struct
         '''
             struct为动态规划网络结构。其形式如下：
             struct = [阶段0状态数, 阶段1状态数, ..., 阶段n - 1状态数]
         '''
-        self.num_stage = len(self.stages)#阶段数
+        self.num_stage = len(self.struct)#阶段数
         self.link = link
         '''
             连接函数，形式为link(stage_idx, status_idx)
@@ -129,7 +133,11 @@ class DyOptim:
             惩罚函数，形式为cost(stage_idx, status_idx, next_status_idx)
             返回stage_idx阶段status_idx状态与stage_idx + 1阶段next_status_idx状态间的路程
         '''
-        self.route = []
+        if end_cost is None:
+            def end_cost(_): return 0.
+        self.end_cost = end_cost
+
+        self.route, self.pointer = None, None
         '''
             暂定路径规划，在规划到第k状态时其形式为
             [
@@ -159,12 +167,16 @@ class DyOptim:
                 ..., 
                 (状态###, 下一阶段状态, cost-to-go)], #阶段n - 1]
         '''
-        self.pointer = self.num_stage - 1
+        self.reset()
 
     def cal_value(self, state_idx): #用第state_idx + 1个状态的cost-to-go信息生成第state_idx个状态的cost-to-go和pointer信息
         
         assert state_idx == self.pointer
+        print("开始规划第%i阶段" %(state_idx))
         self.route = [[]] + self.route
+
+        if self.pointer == self.num_stage - 1:
+            return self.cal_end()
 
         for stage_idx in range(self.struct[state_idx]): 
             min_c = inf
@@ -175,8 +187,18 @@ class DyOptim:
                     min_p = this_p #并更新指针:直接把nstate的值赋给pointer便能寻址
             self.route[0].append((stage_idx, min_p, min_c))
         
-        self.pointer -= 1; 
+        self.pointer -= 1
     
+    def cal_end(self): 
+        assert self.pointer == self.num_stage - 1
+        self.route = [[]] + self.route
+        
+        for stage_idx in range(self.struct[-1]): 
+            self.route[0].append((stage_idx, None, self.end_cost(stage_idx)))
+        
+        self.pointer -= 1
+
+
     def cpr_route(self, state_idx): #根据第state_idx - 1个状态的pointer信息删除第state_idx个状态的大部分记录，仅保留pointer指向的状态的信息，精简路径列表，降低空间复杂度
         
         assert state_idx > self.pointer + 1
@@ -187,6 +209,7 @@ class DyOptim:
             if not idx in valid_stage:
                 valid_stage.append(idx)
 
+        ori_len = len(self.route[state_idx - self.pointer - 1])
         i = 0
         j = 0
 
@@ -202,7 +225,37 @@ class DyOptim:
                 j += 1
             else:
                 del self.route[state_idx - self.pointer - 1][i]
+        
+        return ori_len - len(self.route[state_idx - self.pointer - 1])
     
+    def cpr_routes(self, start_idx, end_idx): 
+        cpr_size = 0
+        for idx in range(start_idx, min(end_idx, self.num_stage - 1)): 
+            cpr_size += self.cpr_route(idx)
+        return cpr_size
+    
+    def cpr_route_period(self, start_idx, l): 
+        return self.cpr_routes(start_idx, start_idx + l)
+    
+    def cpr_after(self, start_idx): 
+        return self.cpr_routes(start_idx, self.num_stage - 1)
+    
+    def cpr_all(self):
+        return self.cpr_after(self.pointer + 2)
+    
+    def reset(self):
+        del self.route
+        self.pointer = self.num_stage - 1
+        self.route = []
+
+    def step(self): 
+        self.cal_value(self.pointer)
+    
+    def forward(self): 
+        self.reset()
+        while(self.pointer >= 0):
+            self.step()
+
     def output(self):
         best_value = inf
         best_road = np.zeros(1)
