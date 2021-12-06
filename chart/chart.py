@@ -1,11 +1,13 @@
 import codecs
 import json
 from os.path import exists
+
 from diff import Diff
 
 
 class Chart:
-    def __init__(self, filename) -> None:
+    def __init__(self, filename) -> None: 
+        assert filename[-5:] == ".json"
         self.file = filename
         self.json = None
         self.diff = Diff().xnote_diff()
@@ -38,6 +40,7 @@ class Chart:
                 
         self.keys = [key_info for key_info in zip(id, size, time, pos, iflinks)]
         self.iflinks = iflinks
+        self.num_keys = len(self.keys)
     
     def xnote_diff(self, idxp, idxn, flag): 
         bt = self.iflinks[idxp] * 2 + self.iflinks[idxn]
