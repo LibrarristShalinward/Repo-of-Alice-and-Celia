@@ -2,7 +2,17 @@ from chart import Chart
 from DyOp import DyOptim
 import yaml as y
 import codecs
+from typing import Iterable
+import sys
 import json
+
+
+
+def size_of_iter(iter):
+    if isinstance(iter, Iterable):
+        return sum([size_of_iter(item) for item in iter])
+    else: 
+        return sys.getsizeof(iter)
 
 
 
@@ -41,10 +51,13 @@ class PoliciedChart(Chart, DyOptim):
             else: flag = False
         
         if flag: 
-            print("使用默认设置")
+            print("使用默认动态规划设置")
             self.minStageLen = self.cfg["minStageLen"]
             self.maxStageLen = self.cfg["maxStageLen"]
             self.stageTime = self.cfg["stageTime"]
+    
+    def __sizeof__(self):
+        return size_of_iter(self.route) / 2 ** 20
 
 
 
@@ -157,27 +170,46 @@ class PoliciedChart(Chart, DyOptim):
     
 
 
-    def forward(self):
-        return DyOptim.forward(self)
+    def forward(self, cpr_lv = 0):
+        if cpr_lv == 0: 
+            return DyOptim.forward(self)
+        self.reset()
+        self.step()
+        for _ in range(10):
+            self.step()
+            if cpr_lv > 0: self.cpr_route(self.pointer + 2)
+        while(self.pointer >= 0):
+            self.step()
+            if cpr_lv > 0: self.cpr_route(self.pointer + 2)
+            if cpr_lv > 1 and self.pointer % 10 == 0: self.cpr_route_period(self.pointer + 2, 10)
+        if cpr_lv > 2: self.cpr_all()
 
-    def get_op_re(self):
+    def get_op_re(self, cpr_lv = 3):
         if not self.route:
-            self.forward()
+            self.forward(cpr_lv)
         
         self.re = []
-        next = 0 if self.route[1][0][2] < self.route[1][1][2] else 1
-        for state in self.route[1:-1]:
-            self.re.append(state[next][0] % 2)
-            next = state[next][1]
+        if len(self.route[1]) > 1: 
+            next = 0 if self.route[1][0][2] < self.route[1][1][2] else 1
+        else:
+            next = 0
+        
+        for state in self.route[1:-1]: 
+            try: 
+                next_idx = [live[0] for live in state].index(next)
+                self.re.append(state[next_idx][0] % 2)
+                next = state[next_idx][1]
+            except: 
+                assert False, "压缩存储空间过程中，最优路径断裂，阶段编号：%i" %(self.route.index(state))
         
         return self.re
     
-    def export(self, filename = None): 
+    def export(self, filename = None, cpr_lv = 3): 
         if filename is None: 
             filename = self.file[:-5] + ".a&c"
         
         exp_json = self.json
-        for i in range(len(self.get_op_re())):
+        for i in range(len(self.get_op_re(cpr_lv))):
             exp_json["notes"][i]["_hand"] = self.re[i]
         
         with codecs.open(filename, "w") as f:
@@ -185,5 +217,5 @@ class PoliciedChart(Chart, DyOptim):
         
         return exp_json
     
-    def __call__(self, filename = None):
-        return self.export(filename)
+    def __call__(self, filename = None, cpr_lv = 3):
+        return self.export(filename, cpr_lv)

@@ -211,21 +211,16 @@ class DyOptim:
                 valid_stage.append(idx)
 
         ori_len = len(self.route[state_idx - self.pointer - 1])
-        i = 0
-        j = 0
-
-        while(i < len(self.route[state_idx - self.pointer - 1])): 
-            if j == len(valid_stage):
-                del self.route[state_idx - self.pointer - 1][i:]
-                break
-            else: 
-                vld_idx = valid_stage[j]
-            
-            if self.route[state_idx - self.pointer - 1][i][0] == vld_idx:
-                i += 1
-                j += 1
+        alive_len = ori_len
+        i = -1
+        
+        while(- i < alive_len):
+            if self.route[state_idx - self.pointer - 1][i][0] in valid_stage:
+                i -= 1
             else:
-                del self.route[state_idx - self.pointer - 1][i]
+                self.route[state_idx - self.pointer - 1].pop(i)
+                alive_len -= 1
+            # print(i, alive_len)
         
         return ori_len - len(self.route[state_idx - self.pointer - 1])
     
