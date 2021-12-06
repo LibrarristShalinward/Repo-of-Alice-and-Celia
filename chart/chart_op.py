@@ -10,38 +10,49 @@ class PoliciedChart(Chart, DyOptim):
     def __init__(self, filename) -> None:
         with open("op_cfg.yaml", "r") as f: 
             self.cfg = y.load(f)
+            self.set_cfg()
         self.op_struct = None
         self.link, self.cost, self.end = None, None, None
         self.route = None
 
-        Chart.__init__(filename)
+        Chart.__init__(self, filename)
+        self.load()
 
-        DyOptim.__init__(
+        DyOptim.__init__(self, 
             [2 ** st for st in self.get_op_struct()], 
             self.get_link(), 
-            self.get_cost, 
+            self.get_cost(), 
             self.get_end())
     
-    def get_op_struct(self, cfg = None): 
+    def set_cfg(self, cfg = None): 
         flag = True
 
         if cfg: 
-            try: self.cfg.minStageLen = cfg.minStageLen
+            try: self.minStageLen = cfg["minStageLen"]
             except: pass
             else: flag = False
 
-            try: self.cfg.maxStageLen = cfg.maxStageLen
+            try: self.maxStageLen = cfg["maxStageLen"]
             except: pass
             else: flag = False
 
-            try: self.cfg.stageTime = cfg.stageTime
+            try: self.stageTime = cfg["stageTime"]
             except: pass
             else: flag = False
         
-        if flag and self.op_struct is not None:
+        if flag: 
+            print("使用默认设置")
+            self.minStageLen = self.cfg["minStageLen"]
+            self.maxStageLen = self.cfg["maxStageLen"]
+            self.stageTime = self.cfg["stageTime"]
+
+
+
+    def get_op_struct(self): 
+        if self.op_struct is not None:
             return self.op_struct
         
-        time_ran = [key[2] - self.cfg.stageTime for key in self.keys]
+        time_ran = [key[2] - self.stageTime for key in self.keys]
         include_ran = []
 
         for i in range(self.num_keys): 
@@ -57,9 +68,9 @@ class PoliciedChart(Chart, DyOptim):
             else: 
                 include_ran[i] = 0
         
-        for i in range(self.cfg.maxStageLen, len(include_ran)):
-            include_ran[i] = max(include_ran[i], self.cfg.maxStageLen)
-            include_ran[i] = min(include_ran[i], self.cfg.maxStageLen)
+        for i in range(self.maxStageLen, len(include_ran)):
+            include_ran[i] = max(include_ran[i], self.minStageLen)
+            include_ran[i] = min(include_ran[i], self.maxStageLen)
         
         self.op_struct = include_ran
 
@@ -147,10 +158,10 @@ class PoliciedChart(Chart, DyOptim):
 
 
     def forward(self):
-        return super().forward()
+        return DyOptim.forward(self)
 
     def get_op_re(self):
-        if self.route is None:
+        if not self.route:
             self.forward()
         
         self.re = []
@@ -166,7 +177,7 @@ class PoliciedChart(Chart, DyOptim):
             filename = self.file[:-5] + ".a&c"
         
         exp_json = self.json
-        for i in range(len(self.re)):
+        for i in range(len(self.get_op_re())):
             exp_json["notes"][i]["_hand"] = self.re[i]
         
         with codecs.open(filename, "w") as f:

@@ -172,7 +172,8 @@ class DyOptim:
     def cal_value(self, state_idx): #用第state_idx + 1个状态的cost-to-go信息生成第state_idx个状态的cost-to-go和pointer信息
         
         assert state_idx == self.pointer
-        print("开始规划第%i阶段" %(state_idx))
+        if state_idx % 100 == 0: 
+            print("开始规划第%i阶段" %(state_idx))
         self.route = [[]] + self.route
 
         if self.pointer == self.num_stage - 1:
