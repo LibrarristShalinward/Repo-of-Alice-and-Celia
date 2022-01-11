@@ -1,11 +1,12 @@
 # 目标函数相关的类
 import yaml as y
 
+c_path = __file__[:-7]
 ReLU = lambda x : max(x, 0)
 
 class config:
     def __init__(self) -> None:
-        with open("diff_cfg.yaml", "r") as f:
+        with open(c_path + "diff_cfg.yaml", "r") as f:
             yml = y.load(f)
         for key, value in yml.items(): 
             self.__setattr__(key, value)

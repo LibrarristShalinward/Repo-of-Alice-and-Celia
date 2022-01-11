@@ -1,10 +1,14 @@
-from chart import Chart
-from DyOp import DyOptim
+from .chart import Chart
+from .DyOp import DyOptim
 import yaml as y
 import codecs
 from typing import Iterable
 import sys
 import json
+
+
+
+c_path = __file__[:-11]
 
 
 
@@ -18,7 +22,7 @@ def size_of_iter(iter):
 
 class PoliciedChart(Chart, DyOptim): 
     def __init__(self, filename) -> None:
-        with open("op_cfg.yaml", "r") as f: 
+        with open(c_path + "op_cfg.yaml", "r") as f: 
             self.cfg = y.load(f)
             self.set_cfg()
         self.op_struct = None
@@ -33,6 +37,8 @@ class PoliciedChart(Chart, DyOptim):
             self.get_link(), 
             self.get_cost(), 
             self.get_end())
+        
+        # self.max_size = 0.
     
     def set_cfg(self, cfg = None): 
         flag = True
@@ -183,6 +189,11 @@ class PoliciedChart(Chart, DyOptim):
             if cpr_lv == 1: self.cpr_route(self.pointer + 2)
             if cpr_lv == 2 and self.pointer % 10 == 0: self.cpr_route_period(self.pointer + 2, 10)
         if cpr_lv == 3: self.cpr_all()
+    
+    # def step(self):
+    #     super().step()
+    #     if self.pointer % 10 == 0: 
+    #         self.max_size = max(self.max_size, self.__sizeof__())
 
     def get_op_re(self, cpr_lv = 3):
         if not self.route:
