@@ -2,7 +2,7 @@ import codecs
 import json
 from os.path import exists
 
-from diff import Diff
+from .diff import Diff
 
 
 class Chart:

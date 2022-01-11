@@ -1,10 +1,14 @@
-from chart import Chart
-from DyOp import DyOptim
+from .chart import Chart
+from .DyOp import DyOptim
 import yaml as y
 import codecs
 from typing import Iterable
 import sys
 import json
+
+
+
+c_path = __file__[:-11]
 
 
 
@@ -18,7 +22,7 @@ def size_of_iter(iter):
 
 class PoliciedChart(Chart, DyOptim): 
     def __init__(self, filename) -> None:
-        with open("op_cfg.yaml", "r") as f: 
+        with open(c_path + "op_cfg.yaml", "r") as f: 
             self.cfg = y.load(f)
             self.set_cfg()
         self.op_struct = None
